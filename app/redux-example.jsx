@@ -1,6 +1,47 @@
 var redux = require('redux');
 
 console.log('Starting redux example');
+
+var reducer = (state = {name: 'Anonyous'}, action) => {
+  //state = state || {name: 'Anonyous'}
+
+  return state;
+};
+var store = redux.createStore(reducer);
+
+var currentState = store.getState();
+console.log('currentState ', currentState);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /*
 // Pure function, No Side effects and always return the same value for same arguments
 function add(a, b){
