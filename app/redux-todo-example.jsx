@@ -2,7 +2,7 @@ var redux = require('redux');
 
 console.log('Starting todo redux app...');
 
-
+var nextTodoId = 1;
 var stateDefault = {
   searchText: '',
   showCompleted: false,
@@ -18,6 +18,18 @@ var reducer = (state = stateDefault, action) => {
         searchText: action.searchText
       }
     break;
+    case 'ADD_TODO':
+      return {
+        ...state,
+        todos: [
+          ...state.todos,
+          {
+            id: nextTodoId++,
+            text: state.text
+          }
+        ]
+      };
+    break;
     default:
     return state;
   }
@@ -31,7 +43,7 @@ var store = redux.createStore(reducer, redux.compose(
 var unsubscribe = store.subscribe(() => {
   var state = store.getState();
 
-  console.log('After Subscribe - Search Text is ', state.searchText);
+  console.log('After Subscribe - State: ', state);
   $('#app').text(state.searchText);
 });
 
@@ -49,4 +61,9 @@ store.dispatch({
 store.dispatch({
   type: 'CHANGE_SEARCH_TEXT',
   searchText: 'Study Redux'
+});
+
+store.dispatch({
+  type: 'ADD_TODO',
+  text: 'Do some meditation'
 });
