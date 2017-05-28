@@ -23,7 +23,19 @@ var reducer = (state = stateDefault, action) => {
   }
 };
 
-var store = redux.createStore(reducer);
+var store = redux.createStore(reducer, redux.compose(
+  window.devToolsExtension ? window.devToolsExtension() : f => f
+));
+
+// Subscribe to Changes in state
+var unsubscribe = store.subscribe(() => {
+  var state = store.getState();
+
+  console.log('After Subscribe - Search Text is ', state.searchText);
+  $('#app').text(state.searchText);
+});
+
+
 var currentState = store.getState();
 console.log('Current Todo App State: ', currentState);
 
@@ -32,4 +44,9 @@ store.dispatch({
   searchText: 'Go to Sleep'
 });
 
-console.log('New Todo App State: ', store.getState());
+//unsubscribe();
+
+store.dispatch({
+  type: 'CHANGE_SEARCH_TEXT',
+  searchText: 'Study Redux'
+});

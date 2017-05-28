@@ -7,10 +7,10 @@ $(document).foundation();
 // App css
 require('style!css!sass!applicationStyles');
 
-ReactDOM.render(
-  <div>BoilerPlate v3 Project</div>,
-  document.getElementById('app')
-);
+// ReactDOM.render(
+//   <div>BoilerPlate v3 Project</div>,
+//   document.getElementById('app')
+// );
 
 //require('./redux-example.jsx');
 require('./redux-todo-example.jsx');
