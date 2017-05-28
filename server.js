@@ -23,6 +23,14 @@ app.get('/data/2.5/weather', function(req,res) {
   request(newurl).pipe(res);
 });
 
+// Proxy for ip site http://ipinfo.io/json
+app.get('/json', function(req,res) {
+  debugger;
+  console.log(`Third Pary Api Request -  ${req.url}`);
+  var newurl = `http://ipinfo.io/${req.url}`;
+  request(newurl).pipe(res);
+});
+
 // Listen to for incomming requests!!
 app.listen(PORT, function(){
   console.log("Express Serve is up on port 3000. Proxy enabled for Weather API.");
