@@ -8,38 +8,74 @@ var stateDefault = {
   showCompleted: false,
   todos: []
 };
-var reducer = (state = stateDefault, action) => {
-  console.log('New Action ', action);
+// var reducer = (state = stateDefault, action) => {
+//   console.log('New Action ', action);
+//
+//   switch(action.type){
+//     case 'CHANGE_SEARCH_TEXT':
+//       return {
+//         ...state,
+//         searchText: action.searchText
+//       }
+//     break;
+//     case 'ADD_TODO':
+//       return {
+//         ...state,
+//         todos: [
+//           ...state.todos,
+//           {
+//             id: nextTodoId++,
+//             text: action.text
+//           }
+//         ]
+//       };
+//     break;
+//     case 'REMOVE_TODO':
+//     return {
+//       ...state,
+//       todos: state.todos.filter((todo) => todo.id !== action.id)
+//     }
+//     break;
+//     default:
+//     return state;
+//   }
+// };
 
+var searchTextReducer = (state = '', action) => {
   switch(action.type){
     case 'CHANGE_SEARCH_TEXT':
-      return {
-        ...state,
-        searchText: action.searchText
-      }
+      return action.searchText;
     break;
+    default:
+      return state;
+    break;
+  }
+};
+
+var todosReducer = (state = [], action) => {
+  switch(action.type){
     case 'ADD_TODO':
-      return {
-        ...state,
-        todos: [
-          ...state.todos,
+      return [
+          ...state,
           {
             id: nextTodoId++,
             text: action.text
           }
-        ]
-      };
+        ];
     break;
     case 'REMOVE_TODO':
-    return {
-      ...state,
-      todos: state.todos.filter((todo) => todo.id !== action.id)
-    }
+    return state.filter((todo) => todo.id !== action.id);
     break;
     default:
-    return state;
+      return state;
+    break;
   }
 };
+
+var reducer = redux.combineReducers({
+  searchText: searchTextReducer,
+  todos: todosReducer
+});
 
 var store = redux.createStore(reducer, redux.compose(
   window.devToolsExtension ? window.devToolsExtension() : f => f
