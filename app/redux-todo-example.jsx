@@ -2,44 +2,8 @@ var redux = require('redux');
 
 console.log('Starting todo redux app...');
 
-var nextTodoId = 1;
-var stateDefault = {
-  searchText: '',
-  showCompleted: false,
-  todos: []
-};
-// var reducer = (state = stateDefault, action) => {
-//   console.log('New Action ', action);
-//
-//   switch(action.type){
-//     case 'CHANGE_SEARCH_TEXT':
-//       return {
-//         ...state,
-//         searchText: action.searchText
-//       }
-//     break;
-//     case 'ADD_TODO':
-//       return {
-//         ...state,
-//         todos: [
-//           ...state.todos,
-//           {
-//             id: nextTodoId++,
-//             text: action.text
-//           }
-//         ]
-//       };
-//     break;
-//     case 'REMOVE_TODO':
-//     return {
-//       ...state,
-//       todos: state.todos.filter((todo) => todo.id !== action.id)
-//     }
-//     break;
-//     default:
-//     return state;
-//   }
-// };
+// SearchText Reducer and action generators
+// -------------
 
 var searchTextReducer = (state = '', action) => {
   switch(action.type){
@@ -52,6 +16,17 @@ var searchTextReducer = (state = '', action) => {
   }
 };
 
+var changeSearchText = (searchText) => {
+  return {
+    type: 'CHANGE_SEARCH_TEXT',
+    searchText
+  }
+};
+
+// Todos Reducer and action generators
+// -------------
+
+var nextTodoId = 1;
 var todosReducer = (state = [], action) => {
   switch(action.type){
     case 'ADD_TODO':
@@ -72,55 +47,60 @@ var todosReducer = (state = [], action) => {
   }
 };
 
+var addTodo = (text) => {
+  return {
+    type: 'ADD_TODO',
+    text
+  }
+};
+
+var removeTodo = (id) => {
+  return {
+    type: 'REMOVE_TODO',
+    id
+  }
+};
+
+// Combining Reducers
+// -------------
+
 var reducer = redux.combineReducers({
   searchText: searchTextReducer,
   todos: todosReducer
 });
 
+// Creating Store
+// -------------
+
 var store = redux.createStore(reducer, redux.compose(
   window.devToolsExtension ? window.devToolsExtension() : f => f
 ));
 
-// Subscribe to Changes in state
+// Subscribe to changes in state
+// -------------
+
 var unsubscribe = store.subscribe(() => {
   var state = store.getState();
 
   console.log('After Subscribe - State: ', state);
   $('#app').text(state.searchText);
 });
-
+//unsubscribe();
 
 var currentState = store.getState();
 console.log('Current Todo App State: ', currentState);
 
-store.dispatch({
-  type: 'CHANGE_SEARCH_TEXT',
-  searchText: 'Go to Sleep'
-});
+// Dispatch Events...
+// -------------
 
-//unsubscribe();
+store.dispatch(changeSearchText('Go to sleep'));
 
-store.dispatch({
-  type: 'CHANGE_SEARCH_TEXT',
-  searchText: 'Study Redux'
-});
+store.dispatch(changeSearchText('Study Redux'));
 
-store.dispatch({
-  type: 'ADD_TODO',
-  text: 'Do some meditation'
-});
+store.dispatch(addTodo('Do some meditation'));
 
-store.dispatch({
-  type: 'ADD_TODO',
-  text: 'Sleep Early'
-});
+store.dispatch(addTodo('Sleep Early...zzz'));
 
-store.dispatch({
-  type: 'REMOVE_TODO',
-  id: 1
-});
+store.dispatch(removeTodo(1));
 
-store.dispatch({
-  type: 'CHANGE_SEARCH_TEXT',
-  searchText: 'Being Awesome'
-});
+store.dispatch(changeSearchText('Being Awesome!!'));
