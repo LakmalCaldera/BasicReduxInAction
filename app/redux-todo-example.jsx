@@ -25,10 +25,16 @@ var reducer = (state = stateDefault, action) => {
           ...state.todos,
           {
             id: nextTodoId++,
-            text: state.text
+            text: action.text
           }
         ]
       };
+    break;
+    case 'REMOVE_TODO':
+    return {
+      ...state,
+      todos: state.todos.filter((todo) => todo.id !== action.id)
+    }
     break;
     default:
     return state;
@@ -66,4 +72,19 @@ store.dispatch({
 store.dispatch({
   type: 'ADD_TODO',
   text: 'Do some meditation'
+});
+
+store.dispatch({
+  type: 'ADD_TODO',
+  text: 'Sleep Early'
+});
+
+store.dispatch({
+  type: 'REMOVE_TODO',
+  id: 1
+});
+
+store.dispatch({
+  type: 'CHANGE_SEARCH_TEXT',
+  searchText: 'Being Awesome'
 });
